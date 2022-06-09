@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable,  } from 'rxjs';
 import { Country } from '../interfaces/pais.interface';
@@ -12,19 +12,29 @@ export class PaisService {
 
   constructor(private http: HttpClient) { }
 
+  get paramsHttp(){
+    return new HttpParams().set('fields', 'name,capital,alpha2Code,flag,population');
+
+  }
+
   buscarPais(termino: string): Observable<Country[]>{
     const url = `${this.apiUrl}/name/${termino}`
-    return this.http.get<Country[]>(url);
+    return this.http.get<Country[]>(url, {params: this.paramsHttp});
   }
 
   buscarPaisPorCapital(termino: string): Observable<Country[]>{
     const url =  `${this.apiUrl}/capital/${termino}`
-    return this.http.get<Country[]>(url);
+    return this.http.get<Country[]>(url, {params: this.paramsHttp});
   }
 
   buscarPasiPorAlphaCode(termino: string): Observable<Country>{
     const url = `${this.apiUrl}/alpha/${termino}`
     return this.http.get<Country>(url);
+  }
+
+  buscarPaisPorRegionBloc(region: string): Observable<Country[]>{
+    const url = `${this.apiUrl}/regionalbloc/${region}`;
+    return this.http.get<Country[]>(url, {params: this.paramsHttp});
   }
 
 }
